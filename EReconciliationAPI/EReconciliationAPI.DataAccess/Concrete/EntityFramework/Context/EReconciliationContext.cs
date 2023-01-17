@@ -13,7 +13,7 @@ namespace EReconciliationAPI.DataAccess.Concrete.EntityFramework.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-I6RA8LI;Database=EReconciliation;Integrated Security=true;");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-I6RA8LI;Database=EReconciliation;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
         public DbSet<AccountReconciliation> AccountReconciliations { get; set; }
         public DbSet<AccountReconciliationDetail> AccountReconciliationDetails { get; set; }

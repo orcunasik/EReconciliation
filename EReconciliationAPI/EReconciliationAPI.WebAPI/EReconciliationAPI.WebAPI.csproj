@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EReconciliationAPI.Business\EReconciliationAPI.Business.csproj" />
+    <ProjectReference Include="..\EReconciliationAPI.DataAccess\EReconciliationAPI.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

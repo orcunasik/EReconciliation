@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EReconciliationAPI.DataAccess\EReconciliationAPI.DataAccess.csproj" />
+    <ProjectReference Include="..\EReconciliationAPI.Entities\EReconciliationAPI.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.5.0" />
+  </ItemGroup>
+
 </Project>
