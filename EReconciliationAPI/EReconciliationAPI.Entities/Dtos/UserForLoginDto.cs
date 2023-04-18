@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EReconciliationAPI.Entities.Dtos
 {
-    public class UserForRegister : IDto
+    public class UserForLoginDto : IDto
     {
-        public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }

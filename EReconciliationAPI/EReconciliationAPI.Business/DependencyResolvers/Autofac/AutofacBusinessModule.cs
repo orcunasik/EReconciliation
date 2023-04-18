@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Concrete;
+using EReconciliationAPI.Core.Utilities.Security.JWT;
 using EReconciliationAPI.DataAccess.Abstract;
 using EReconciliationAPI.DataAccess.Concrete.EntityFramework;
 
@@ -33,6 +34,13 @@ namespace EReconciliationAPI.Business.DependencyResolvers.Autofac
 
             builder.RegisterType<MailParameterService>().As<IMailParameterService>();
             builder.RegisterType<EfMailParameterDal>().As<IMailParameterDal>();
+
+            builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<EfUserDal>().As<IUserDal>();
+
+            builder.RegisterType<AuthService>().As<IAuthService>();
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
         }
     }
 }
