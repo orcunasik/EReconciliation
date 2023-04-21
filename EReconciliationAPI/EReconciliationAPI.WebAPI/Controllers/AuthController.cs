@@ -1,4 +1,5 @@
 ﻿using EReconciliationAPI.Business.Abstract;
+using EReconciliationAPI.Entities.Concrete;
 using EReconciliationAPI.Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,23 +17,44 @@ namespace EReconciliationAPI.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserForRegisterDto userForRegister)
+        public IActionResult Register(UserAndCompanyRegisterDto userAndCompanyRegister)
+        {
+            var userExists = _authService.UserExists(userAndCompanyRegister.userForRegister.Email);
+            if (!userExists.Success)
+            {
+                return BadRequest(userExists.Message);
+            }
+
+            var compantExists = _authService.CompanyExists(userAndCompanyRegister.company);
+            if (!compantExists.Success)
+            {
+                return BadRequest(compantExists.Message);
+            }
+
+            var registerResult = _authService.Register(userAndCompanyRegister.userForRegister, userAndCompanyRegister.userForRegister.Password,userAndCompanyRegister.company);
+            var result = _authService.CreateAccessToken(registerResult.Data, registerResult.Data.CompanyId);
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+           
+            return BadRequest(registerResult.Message);
+        }
+
+        [HttpPost("registerSecondAccount")]
+        public IActionResult RegisterSecondAccount(UserForRegisterDto userForRegister, int companyId)
         {
             var userExists = _authService.UserExists(userForRegister.Email);
             if (!userExists.Success)
             {
                 return BadRequest(userExists.Message);
             }
-            var registerResult = _authService.Register(userForRegister, userForRegister.Password);
-            var result = _authService.CreateAccessToken(registerResult.Data,0);
+            var registerResult = _authService.RegisterSecondAccount(userForRegister, userForRegister.Password);
+            var result = _authService.CreateAccessToken(registerResult.Data,companyId);
             if (result.Success)
             {
                 return Ok(result.Data);
             }
-            //if (registerResult.Success)
-            //{
-            //    return Ok(registerResult);
-            //}
             return BadRequest(registerResult.Message);
         }
 

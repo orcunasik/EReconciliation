@@ -9,5 +9,7 @@
         public static string SuccessfulLogin = "Giriş Başarılı";
         public static string UserRegistered = "Kullanıcı Kaydı Başarılı";
         public static string UserAlreadyExists = "Bu Kullanıcı Sistemde Kayıtlı";
+        public static string CompanyAlreadyExists = "Bu Şirket Sistemde Kayıtlı";
+        public static string MailParameterUpdated = "Mail Paranmetreleri Başarıyla Güncellendi";
     }
 }
