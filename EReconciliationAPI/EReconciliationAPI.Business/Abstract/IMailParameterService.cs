@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EReconciliationAPI.Core.Utilities.Results.Abstract;
+using EReconciliationAPI.Entities.Concrete;
 
 namespace EReconciliationAPI.Business.Abstract
 {
     public interface IMailParameterService
     {
+        IResult Update(MailParameter mailParameter);
+        IDataResult<MailParameter> Get(int companyId);
     }
 }
