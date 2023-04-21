@@ -29,7 +29,7 @@ namespace EReconciliationAPI.WebAPI.Controllers
         [HttpPost("addCompany")]
         public IActionResult AddCompany(Company company)
         {
-            var result = _companyService.Save(company);
+            var result = _companyService.Add(company);
             if (result.Success)
             {
                 return Ok(result);
