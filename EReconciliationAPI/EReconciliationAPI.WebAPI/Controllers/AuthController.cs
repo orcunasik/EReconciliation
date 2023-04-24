@@ -1,4 +1,5 @@
 ﻿using EReconciliationAPI.Business.Abstract;
+using EReconciliationAPI.Core.Utilities.Results.Concrete;
 using EReconciliationAPI.Entities.Concrete;
 using EReconciliationAPI.Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -42,15 +43,15 @@ namespace EReconciliationAPI.WebAPI.Controllers
         }
 
         [HttpPost("registerSecondAccount")]
-        public IActionResult RegisterSecondAccount(UserForRegisterDto userForRegister, int companyId)
+        public IActionResult RegisterSecondAccount(UserForRegisterToSecondAccountDto userForRegister)
         {
             var userExists = _authService.UserExists(userForRegister.Email);
             if (!userExists.Success)
             {
                 return BadRequest(userExists.Message);
             }
-            var registerResult = _authService.RegisterSecondAccount(userForRegister, userForRegister.Password);
-            var result = _authService.CreateAccessToken(registerResult.Data,companyId);
+            var registerResult = _authService.RegisterSecondAccount(userForRegister, userForRegister.Password, userForRegister.CompanyId);
+            var result = _authService.CreateAccessToken(registerResult.Data,userForRegister.CompanyId);
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -66,12 +67,51 @@ namespace EReconciliationAPI.WebAPI.Controllers
             {
                 return BadRequest(userToLogin.Message);
             }
-            var result = _authService.CreateAccessToken(userToLogin.Data, 0);
+
+            if (userToLogin.Data.IsActive)
+            {
+                var userCompany = _authService.GetCompany(userToLogin.Data.Id).Data;
+                var result = _authService.CreateAccessToken(userToLogin.Data, userCompany.CompanyId);
+                if (result.Success)
+                {
+                    return Ok(result.Data);
+                }
+                return BadRequest(result.Message);
+            }
+            else
+            {
+                return BadRequest("Kullanıcı PASİF durumda. Aktif edilmesi için YÖNETİCİye başvurun.");
+            }
+
+            
+            
+        }
+
+        [HttpGet("confirmuser")]
+        public IActionResult ConfirmUser(string value)
+        {
+            var user = _authService.GetByMailConfirmValue(value).Data;
+            user.MailConfirm = true;
+            user.MailConfirmDate = DateTime.Now;
+            var result = _authService.Update(user);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpGet("sendconfirmemail")]
+        public IActionResult SendConfirmEmail(int id)
+        {
+            var user = _authService.GetById(id).Data;
+            var result = _authService.SendConfirmEmail(user);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+
         }
     }
 }

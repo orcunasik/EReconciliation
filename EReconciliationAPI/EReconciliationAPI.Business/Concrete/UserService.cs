@@ -18,14 +18,29 @@ namespace EReconciliationAPI.Business.Concrete
             _userDal.Add(user);
         }
 
+        public User GetById(int id)
+        {
+            return _userDal.Get(p => p.Id == id);
+        }
+
         public User GetByMail(string email)
         {
             return _userDal.Get(p => p.Email == email);
         }
 
+        public User GetByMailConfrimValue(string value)
+        {
+            return _userDal.Get(p => p.MailConfirmValue.ToString() == value);
+        }
+
         public List<OperationClaim> GetClaims(User user, int companyId)
         {
             return _userDal.GetClaims(user,companyId);
+        }
+
+        public void Update(User user)
+        {
+            _userDal.Update(user);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EReconciliationAPI.WebAPI.Controllers

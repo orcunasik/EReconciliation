@@ -34,6 +34,12 @@ namespace EReconciliationAPI.Business.DependencyResolvers.Autofac
 
             builder.RegisterType<MailParameterService>().As<IMailParameterService>();
             builder.RegisterType<EfMailParameterDal>().As<IMailParameterDal>();
+            
+            builder.RegisterType<MailService>().As<IMailService>();
+            builder.RegisterType<EfMailDal>().As<IMailDal>();
+
+            builder.RegisterType<MailTemplateService>().As<IMailTemplateService>();
+            builder.RegisterType<EfMailTemplateDal>().As<IMailTemplateDal>();
 
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();

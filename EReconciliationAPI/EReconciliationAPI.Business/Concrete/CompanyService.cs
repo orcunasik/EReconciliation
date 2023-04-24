@@ -1,5 +1,6 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Constants;
+using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.Core.Utilities.Results.Abstract;
 using EReconciliationAPI.Core.Utilities.Results.Concrete;
 using EReconciliationAPI.DataAccess.Abstract;
@@ -45,6 +46,11 @@ namespace EReconciliationAPI.Business.Concrete
         {
             _companyDal.UserCompanyAdd(userId, companyId);
             return new SuccessResult();
+        }
+
+        public IDataResult<UserCompany> GetCompany(int userId)
+        {
+            return new SuccessDataResult<UserCompany>(_companyDal.GetCompany(userId));
         }
     }
 }

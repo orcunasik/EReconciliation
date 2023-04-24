@@ -3,16 +3,20 @@ using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.DataAccess.Abstract;
 using EReconciliationAPI.DataAccess.Concrete.EntityFramework.Context;
 using EReconciliationAPI.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EReconciliationAPI.DataAccess.Concrete.EntityFramework
 {
     public class EfCompanyDal : EfEntityRepository<Company, EReconciliationContext>, ICompanyDal
     {
+        public UserCompany GetCompany(int userId)
+        {
+            using (EReconciliationContext context = new())
+            {
+                var result = context.UserCompanies.Where(p => p.UserId == userId).FirstOrDefault();
+                return result;
+            }
+        }
+
         public void UserCompanyAdd(int userId, int companyId)
         {
             using (var context = new EReconciliationContext() )
