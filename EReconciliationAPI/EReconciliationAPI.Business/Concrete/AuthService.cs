@@ -1,5 +1,8 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Constants;
+using EReconciliationAPI.Business.ValidationRules.FluentValidation;
+using EReconciliationAPI.Core.Aspects.Autofac.Transaction;
+using EReconciliationAPI.Core.CrossCuttingConcerns.Validation;
 using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.Core.Utilities.Hashing;
 using EReconciliationAPI.Core.Utilities.Results.Abstract;
@@ -7,6 +10,7 @@ using EReconciliationAPI.Core.Utilities.Results.Concrete;
 using EReconciliationAPI.Core.Utilities.Security.JWT;
 using EReconciliationAPI.Entities.Concrete;
 using EReconciliationAPI.Entities.Dtos;
+using FluentValidation;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EReconciliationAPI.Business.Concrete
@@ -72,11 +76,12 @@ namespace EReconciliationAPI.Business.Concrete
 
         }
 
+        [TransactionScopeAspect]
         public IDataResult<UserCompanyDto> Register(UserForRegisterDto userForRegister, string password, Company company)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            var user = new User()
+            User user = new User()
             {
                 Email = userForRegister.Email,
                 AddedAt = DateTime.Now,
@@ -88,9 +93,11 @@ namespace EReconciliationAPI.Business.Concrete
                 PasswordSalt = passwordSalt,
                 Name = userForRegister.Name
             };
+
             _userService.Add(user);
             _companyService.Add(company);
             _companyService.UserCompanyAdd(user.Id, company.Id);
+
             UserCompanyDto userCompanyDto = new()
             {
                 Id = user.Id,

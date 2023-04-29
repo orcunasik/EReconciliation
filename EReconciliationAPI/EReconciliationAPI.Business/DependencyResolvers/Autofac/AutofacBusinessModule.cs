@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
 using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Concrete;
+using EReconciliationAPI.Core.Utilities.Interceptors;
 using EReconciliationAPI.Core.Utilities.Security.JWT;
 using EReconciliationAPI.DataAccess.Abstract;
 using EReconciliationAPI.DataAccess.Concrete.EntityFramework;
@@ -46,6 +49,12 @@ namespace EReconciliationAPI.Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AuthService>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
+
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new ProxyGenerationOptions()
+            {
+                Selector = new AspectInterceptorSelector()
+            }).SingleInstance();
 
         }
     }

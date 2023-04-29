@@ -1,4 +1,6 @@
 ﻿using EReconciliationAPI.Business.Abstract;
+using EReconciliationAPI.Business.ValidationRules.FluentValidation;
+using EReconciliationAPI.Core.Aspects.Autofac.Validation;
 using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.DataAccess.Abstract;
 
@@ -13,6 +15,8 @@ namespace EReconciliationAPI.Business.Concrete
             _userDal = userDal;
         }
 
+
+        [ValidationAspect(typeof(UserValidator))]
         public void Add(User user)
         {
             _userDal.Add(user);

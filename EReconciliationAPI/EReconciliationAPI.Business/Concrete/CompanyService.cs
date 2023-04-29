@@ -1,5 +1,7 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Constants;
+using EReconciliationAPI.Business.ValidationRules.FluentValidation;
+using EReconciliationAPI.Core.Aspects.Autofac.Validation;
 using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.Core.Utilities.Results.Abstract;
 using EReconciliationAPI.Core.Utilities.Results.Concrete;
@@ -32,14 +34,11 @@ namespace EReconciliationAPI.Business.Concrete
             return new SuccessDataResult<List<Company>>(_companyDal.GetAll(),Messages.GetListCompany);
         }
 
+        [ValidationAspect(typeof(CompanyValidator))]
         public IResult Add(Company company)
         {
-            if (company.Name.Length > 10)
-            {
-                _companyDal.Add(company);
-                return new SuccessResult(Messages.CompanySuccessfullySaved);
-            }
-            return new ErrorResult("Şirket Adı En Az 10 Karakter Olmalıdır!");
+            _companyDal.Add(company);
+            return new SuccessResult(Messages.CompanySuccessfullySaved);
         }
 
         public IResult UserCompanyAdd(int userId, int companyId)
