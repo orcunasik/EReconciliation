@@ -1,6 +1,6 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Entities.Concrete;
-using Microsoft.AspNetCore.Http;
+using EReconciliationAPI.Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EReconciliationAPI.WebAPI.Controllers
@@ -26,10 +26,30 @@ namespace EReconciliationAPI.WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("addCompany")]
-        public IActionResult AddCompany(Company company)
+        [HttpGet("getCompany")]
+        public IActionResult GetCompany(int id)
         {
-            var result = _companyService.Add(company);
+            var result = _companyService.GetById(id);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("addCompanyAndUserCompany")]
+        public IActionResult AddCompanyAndUserCompany(CompanyDto companyDto)
+        {
+            var result = _companyService.AddCompanyAndUserCompany(companyDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpPut("updateCompanyAndUserCompany")]
+        public IActionResult UpdateCompanyAndUserCompany(Company company)
+        {
+            var result = _companyService.Update(company);
             if (result.Success)
             {
                 return Ok(result);

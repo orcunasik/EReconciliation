@@ -1,12 +1,14 @@
 ﻿using EReconciliationAPI.Business.Abstract;
 using EReconciliationAPI.Business.Constants;
 using EReconciliationAPI.Business.ValidationRules.FluentValidation;
+using EReconciliationAPI.Core.Aspects.Autofac.Transaction;
 using EReconciliationAPI.Core.Aspects.Autofac.Validation;
 using EReconciliationAPI.Core.Entities.Concrete;
 using EReconciliationAPI.Core.Utilities.Results.Abstract;
 using EReconciliationAPI.Core.Utilities.Results.Concrete;
 using EReconciliationAPI.DataAccess.Abstract;
 using EReconciliationAPI.Entities.Concrete;
+using EReconciliationAPI.Entities.Dtos;
 
 namespace EReconciliationAPI.Business.Concrete
 {
@@ -50,6 +52,26 @@ namespace EReconciliationAPI.Business.Concrete
         public IDataResult<UserCompany> GetCompany(int userId)
         {
             return new SuccessDataResult<UserCompany>(_companyDal.GetCompany(userId));
+        }
+
+        [ValidationAspect(typeof(CompanyValidator))]
+        [TransactionScopeAspect]
+        public IResult AddCompanyAndUserCompany(CompanyDto companyDto)
+        {
+            _companyDal.Add(companyDto.Company);
+            _companyDal.UserCompanyAdd(companyDto.UserId, companyDto.Company.Id);
+            return new SuccessResult(Messages.CompanySuccessfullySaved);
+        }
+
+        public IResult Update(Company company)
+        {
+            _companyDal.Update(company);
+            return new SuccessResult(Messages.CompanySuccessfullyUpdated);
+        }
+
+        public IDataResult<Company> GetById(int id)
+        {
+            return new SuccessDataResult<Company>(_companyDal.Get(c => c.Id == id));
         }
     }
 }
