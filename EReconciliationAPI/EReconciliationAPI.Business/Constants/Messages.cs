@@ -3,6 +3,7 @@
     public class Messages
     {
         public static string CompanySuccessfullySaved = "Şirket Kaydı Başarıyla Gerçekleşti";
+        public static string CompanySuccessfullyUpdated = "Şirket Kaydı Başarıyla Güncellendi";
         public static string GetListCompany = "Tüm Şirketler Başarıyla Listelendi";
         public static string CompanyAlreadyExists = "Bu Şirket Sistemde Kayıtlı";
 
